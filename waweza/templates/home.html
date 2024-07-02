@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}    
+    {% for goal in goals %}
+    <landing_page class="display content-section">
+        <div class="summary-body">
+          <div class="goals-metadata">
+            <a class="mr-2" href="#">{{ goal.ending }}</a>
+            <small class="text-muted">{{ goal.date_started }}</small>
+          </div>
+          <h2><a class="goals-title" href="#">{{ goal.title }}</a></h2>
+          <p class="article-content">{{ goal.context }}</p>
+        </div>
+    </landing_page>
+    {% endfor %}
+{% endblock content %}
