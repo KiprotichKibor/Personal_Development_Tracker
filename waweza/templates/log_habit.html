@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mt-4">Log Habit</h1>
+<!-- Log Habit Form -->
+<div class="card mb-4">
+    <div class="card-header">Log Daily Habit Status</div>
+    <div class="card-body">
+        <form method="post" action="{{ url_for('habit.log_habit', habit_id=habit.id) }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="name">Habit Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ habit.name }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="goal">Associated Goal</label>
+                <input type="text" class="form-control" id="goal" name="goal" value="{{ habit.goal.title }}" disabled>
+            </div>
+            <div class="form-group">
+                {{ form.date.label }}
+                {{ form.date(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.completed.label }}
+                {{ form.completed(class="form-check-input") }}
+            </div>
+            <div class="form-group">
+                {{ form.notes.label }}
+                {{ form.notes(class="form-control", rows="3") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

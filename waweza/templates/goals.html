@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mt-4">Goals</h1>
+
+<!-- Form to Create a New Goal -->
+<div class="card mb-4">
+  <div class="card-header">Create a New Goal</div>
+  <div class="card-body">
+    <form method="post" action="{{ url_for('goal.goals') }}">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        {{ form.type.label(class="form-label") }}
+        <select class="form-control" id="{{ form.type.id }}" name="{{ form.type.name }}" required>
+          {% for choice in form.type.choices %}
+          <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="start_date">Start Date</label>
+        <input type="date" class="form-control" id="start_date" name="start_date" required>
+      </div>
+      <div class="form-group">
+        <label for="end_date">End Date</label>
+        <input type="date" class="form-control" id="end_date" name="end_date" required>
+      </div>
+      <div class="form-group">
+        {{ form.status.label(class="form-label") }}
+        <select class="form-control" id="{{ form.status.id }}" name="{{ form.status.name }}" required>
+          {% for choice in form.status.choices %}
+          <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Create Goal</button>
+    </form>
+  </div>
+</div>
+
+<!-- List of Goals -->
+<div class="card mb-4">
+  <div class="card-header">Your Goals</div>
+  <div class="card-body">
+    <ul class="list-group">
+      {% for goal in goals %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <h5>{{ goal.title }}</h5>
+          <p>{{ goal.description }}</p>
+          <span class="badge badge-info">{{ goal.type.name }}</span>
+          <small>Start Date: {{ goal.start_date }}</small><br>
+          <small>End Date: {{ goal.end_date }}</small>
+          <span class="badge badge-secondary">{{ goal.status }}</span>
+        </div>
+        <div>
+          <a href="{{ url_for('goal.edit_goal', goal_id=goal.id) }}" class="btn btn-warning btn-sm">Edit</a>
+          <form method="post" action="{{ url_for('goal.delete_goal', goal_id=goal.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this goal entry?');">Delete</button>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

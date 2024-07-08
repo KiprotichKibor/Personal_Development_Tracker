@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mt-4">Edit Goal</h1>
+
+<!-- Form to Edit Goal -->
+<div class="card mb-4">
+  <div class="card-header">Edit Goal</div>
+  <div class="card-body">
+    <form method="post" action="{{ url_for('goal.edit_goal', goal_id=goal.id) }}">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ goal.title }}" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required>{{ goal.description }}</textarea>
+      </div>
+      <div class="form-group">
+        {{ form.type.label(class="form-label") }}
+        <select class="form-control" id="{{ form.type.id }}" name="{{ form.type.name }}" required>
+          {% for choice in form.type.choices %}
+          <option value="{{ choice[0] }}" {% if goal.type == type %}selected{% endif %}>{{ choice[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="start_date">Start Date</label>
+        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ goal.start_date }}" required>
+      </div>
+      <div class="form-group">
+        <label for="end_date">End Date</label>
+        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ goal.end_date }}" required>
+      </div>
+      <div class="form-group">
+        {{ form.status.label(class="form-label") }}
+        <select class="form-control" id="{{ form.status.id }}" name="{{ form.status.name }}" required>
+          {% for choice in form.status.choices %}
+          <option value="{{ choice[0] }}" {% if goal.status == type %}selected{% endif %}>{{ choice[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Update Goal</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

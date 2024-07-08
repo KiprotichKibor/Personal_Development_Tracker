@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mt-4">Habit History</h1>
+<!-- Habit Details -->
+<div class="card mb-4">
+    <div class="card-header">Habit Details</div>
+    <div class="card-body">
+        <h5>{{ habit.name }}</h5>
+        <span class="badge badge-info">{{ habit.goal.title }}</span>
+        <p>Associated Goal: {{ habit.goal.description }}</p>
+    </div>
+</div>
+<!-- Habit Completion History -->
+<div class="card mb-4">
+    <div class="card-header">Completion History</div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in habit_history %}
+                <tr>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ 'Completed' if entry.completed else 'Not Completed' }}</td>
+                    <td>{{ entry.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

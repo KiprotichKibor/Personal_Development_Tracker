@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mt-4">Mood Chart</h1>
+
+<!-- Visual Representation of Mood Trends -->
+<div class="card mb-4">
+  <div class="card-header">Mood Trends Over Time</div>
+  <div class="card-body">
+      <canvas id="moodChart" width="400" height="200"></canvas>
+  </div>
+</div>
+
+<!-- Mood Distribution -->
+<div class="card mb-4">
+  <div class="card-header">Mood Distribution</div>
+  <div class="card-body">
+      <canvas id="moodDistribution" width="400" height="200"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+  // Mood Trends Chart
+  var ctx = document.getElementById('moodChart').getContext('2d');
+  var moodChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: {{ dates | tojson }},
+          datasets: [{
+              label: 'Mood Over Time',
+              data: {{ mood_values | tojson }},
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1,
+              tension: 0.1
+          }]
+      },
+      options: {
+          responsive: true,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  max: 5,
+                  ticks: {
+                      stepSize: 1,
+                      callback: function(value, index, values) {
+                          return ['', 'Very Sad', 'Sad', 'Neutral', 'Happy', 'Very Happy'][value];
+                      }
+                  }
+              }
+          }
+      }
+  });
+
+  // Mood Distribution Chart
+  var distributionCtx = document.getElementById('moodDistribution').getContext('2d');
+  var moodDistributionChart = new Chart(distributionCtx, {
+      type: 'pie',
+      data: {
+          labels: {{ mood_types | tojson }},
+          datasets: [{
+              data: {{ mood_counts | tojson }},
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.8)',
+                  'rgba(54, 162, 235, 0.8)',
+                  'rgba(255, 206, 86, 0.8)',
+                  'rgba(75, 192, 192, 0.8)',
+                  'rgba(153, 102, 255, 0.8)'
+              ]
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                  position: 'top',
+              },
+              title: {
+                  display: true,
+                  text: 'Mood Distribution'
+              }
+          }
+      }
+  });
+});
+</script>
+{% endblock %}
