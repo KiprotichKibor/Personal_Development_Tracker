@@ -1,16 +1,95 @@
 {% extends "layout.html" %}
 
-{% block content %}    
-    {% for goal in goals %}
-    <landing_page class="display content-section">
-        <div class="summary-body">
-          <div class="goals-metadata">
-            <a class="mr-2" href="#">{{ goal.ending }}</a>
-            <small class="text-muted">{{ goal.date_started }}</small>
-          </div>
-          <h2><a class="goals-title" href="#">{{ goal.title }}</a></h2>
-          <p class="article-content">{{ goal.context }}</p>
-        </div>
-    </landing_page>
-    {% endfor %}
-{% endblock content %}
+{% block content %}
+    <div class="home-container">
+        <!-- Main content area -->
+        <main class="main-content">
+            <header>
+                <h1>Welcome back, {{ current_user.username }}!</h1>
+                <p class="date">{{ current_date.strftime('%A, %B %d, %Y') }}</p>
+            </header>
+
+            <!-- Quick Add Section -->
+            <section class="quick-add">
+                <h2>Quick Add</h2>
+                <div class="quick-add-buttons">
+                    <button onclick="location.href='{{ url_for('goal.goals') }}'"><i class="fas fa-plus"></i> New Goal</button>
+                    <button onclick="location.href='{{ url_for('habit.habits') }}'"><i class="fas fa-plus"></i> New Habit</button>
+                    <button onclick="location.href='{{ url_for('mood.moods') }}'"><i class="fas fa-plus"></i> Log Mood</button>
+                </div>
+            </section>
+
+            <!-- Summary Sections -->
+            <div class="summary-grid">
+                <!-- Goals Summary -->
+                <section class="summary-card">
+                    <h2>Goals Overview</h2>
+                    <div class="summary-content">
+                        <p><strong>{{ goals_count }}</strong> Active Goals</p>
+                        <p><strong>{{ completed_goals_count }}</strong> Completed Goals</p>
+                        <a href="{{ url_for('goal.goals') }}" class="view-all">View All Goals</a>
+                    </div>
+                </section>
+
+                <!-- Habits Summary -->
+                <section class="summary-card">
+                    <h2>Habits Tracker</h2>
+                    <div class="summary-content">
+                        <p><strong>{{ habits_count }}</strong> Active Habits</p>
+                        <p><strong>{{ habits_completed_today }}</strong> Completed Today</p>
+                        <a href="{{ url_for('habit.habits') }}" class="view-all">View All Habits</a>
+                    </div>
+                </section>
+
+                <!-- Mood Summary -->
+                <section class="summary-card">
+                    <h2>Recent Moods</h2>
+                    <div class="summary-content">
+                        <p>Last 7 Days Mood Average: <strong>{{ mood_average }}/5</strong></p>
+                        <div id="mood-chart"></div>
+                        <a href="{{ url_for('mood.moods') }}" class="view-all">View Mood History</a>
+                    </div>
+                </section>
+
+                <!-- Quick Analytics -->
+                <section class="summary-card">
+                    <h2>Quick Analytics</h2>
+                    <div class="summary-content">
+                        <p>Goal Completion Rate: <strong>{{ goal_completion_rate }}%</strong></p>
+                        <p>Habit Streak: <strong>{{ habit_streak }} days</strong></p>
+                        <a href="{{ url_for('analytics.analytics') }}" class="view-all">View Full Analytics</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    {% endblock content %}
+
+    {% block scripts %}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        // Mood chart
+        var ctx = document.getElementById('mood-chart').getContext('2d');
+        var moodChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ mood_dates | safe }},
+                datasets: [{
+                    label: 'Mood',
+                    data: {{ mood_values | safe }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock scripts %}

@@ -1,244 +1,244 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1 class="mt-4">Weekly Analytics Dashboard</h1>
+    <h1 class="mt-4">Weekly Analytics Dashboard</h1>
 
-<!-- Summary Statistics -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Goals Completed</h5>
-                <p class="card-text" id="goalsCompleted">Loading...</p>
+    <!-- Summary Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Goals Completed</h5>
+                    <p class="card-text" id="goalsCompleted">Loading...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Habit Completion Rate</h5>
+                    <p class="card-text" id="habitCompletionRate">Loading...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Most Common Mood</h5>
+                    <p class="card-text" id="mostCommonMood">Loading...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mood Trend</h5>
+                    <p class="card-text" id="moodTrend">Loading...</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Habit Completion Rate</h5>
-                <p class="card-text" id="habitCompletionRate">Loading...</p>
-            </div>
+
+    <!-- Goal Progress Chart -->
+    <div class="card mb-4">
+        <div class="card-header">Goal Progress</div>
+        <div class="card-body">
+            <canvas id="goalChart" width="400" height="200"></canvas>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Most Common Mood</h5>
-                <p class="card-text" id="mostCommonMood">Loading...</p>
-            </div>
+
+    <!-- Habit Completion Rates Chart -->
+    <div class="card mb-4">
+        <div class="card-header">Habit Completion Rates</div>
+        <div class="card-body">
+            <canvas id="habitChart" width="400" height="200"></canvas>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Mood Trend</h5>
-                <p class="card-text" id="moodTrend">Loading...</p>
-            </div>
+
+    <!-- Mood Distribution Chart -->
+    <div class="card mb-4">
+        <div class="card-header">Mood Distribution</div>
+        <div class="card-body">
+            <canvas id="moodChart" width="400" height="200"></canvas>
         </div>
     </div>
-</div>
 
-<!-- Goal Progress Chart -->
-<div class="card mb-4">
-    <div class="card-header">Goal Progress</div>
-    <div class="card-body">
-        <canvas id="goalChart" width="400" height="200"></canvas>
+    <!-- Mood Over Time Chart -->
+    <div class="card mb-4">
+        <div class="card-header">Mood Over Time</div>
+        <div class="card-body">
+            <canvas id="moodTimeChart" width="400" height="200"></canvas>
+        </div>
     </div>
-</div>
 
-<!-- Habit Completion Rates Chart -->
-<div class="card mb-4">
-    <div class="card-header">Habit Completion Rates</div>
-    <div class="card-body">
-        <canvas id="habitChart" width="400" height="200"></canvas>
+    <!-- Goal-Habit Correlation Chart -->
+    <div class="card mb-4">
+        <div class="card-header">Goal-Habit Correlation</div>
+        <div class="card-body">
+            <canvas id="correlationChart" width="400" height="200"></canvas>
+        </div>
     </div>
-</div>
 
-<!-- Mood Distribution Chart -->
-<div class="card mb-4">
-    <div class="card-header">Mood Distribution</div>
-    <div class="card-body">
-        <canvas id="moodChart" width="400" height="200"></canvas>
-    </div>
-</div>
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Mood Over Time Chart -->
-<div class="card mb-4">
-    <div class="card-header">Mood Over Time</div>
-    <div class="card-body">
-        <canvas id="moodTimeChart" width="400" height="200"></canvas>
-    </div>
-</div>
+    <!-- JavaScript to fetch data and render charts -->
+    <script>
+    fetch('/analytics/data')
+        .then(response => response.json())
+        .then(data => {
+            // Update Summary Statistics
+            document.getElementById('goalsCompleted').textContent = data.goals_completed + '%';
+            document.getElementById('habitCompletionRate').textContent = data.habit_completion_rate + '%';
+            document.getElementById('mostCommonMood').textContent = data.most_common_mood;
+            document.getElementById('moodTrend').textContent = data.mood_trend;
 
-<!-- Goal-Habit Correlation Chart -->
-<div class="card mb-4">
-    <div class="card-header">Goal-Habit Correlation</div>
-    <div class="card-body">
-        <canvas id="correlationChart" width="400" height="200"></canvas>
-    </div>
-</div>
-
-<!-- Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- JavaScript to fetch data and render charts -->
-<script>
-fetch('/analytics/data')
-    .then(response => response.json())
-    .then(data => {
-        // Update Summary Statistics
-        document.getElementById('goalsCompleted').textContent = data.goals_completed + '%';
-        document.getElementById('habitCompletionRate').textContent = data.habit_completion_rate + '%';
-        document.getElementById('mostCommonMood').textContent = data.most_common_mood;
-        document.getElementById('moodTrend').textContent = data.mood_trend;
-
-        // Goal Progress Chart
-        new Chart(document.getElementById('goalChart'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data.goal_progress),
-                datasets: [{
-                    label: 'Goal Progress',
-                    data: Object.values(data.goal_progress),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 2,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                return ['Not Started', 'In Progress', 'Completed'][value];
+            // Goal Progress Chart
+            new Chart(document.getElementById('goalChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.goal_progress),
+                    datasets: [{
+                        label: 'Goal Progress',
+                        data: Object.values(data.goal_progress),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 2,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return ['Not Started', 'In Progress', 'Completed'][value];
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Habit Completion Rates Chart
-        new Chart(document.getElementById('habitChart'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data.habit_completion),
-                datasets: [{
-                    label: 'Habit Completion Rates',
-                    data: Object.values(data.habit_completion),
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 7
+            // Habit Completion Rates Chart
+            new Chart(document.getElementById('habitChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.habit_completion),
+                    datasets: [{
+                        label: 'Habit Completion Rates',
+                        data: Object.values(data.habit_completion),
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 7
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        // Mood Distribution Chart
-        new Chart(document.getElementById('moodChart'), {
-            type: 'pie',
-            data: {
-                labels: Object.keys(data.mood_counter),
-                datasets: [{
-                    label: 'Mood Distribution',
-                    data: Object.values(data.mood_counter),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
+            // Mood Distribution Chart
+            new Chart(document.getElementById('moodChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data.mood_counter),
+                    datasets: [{
+                        label: 'Mood Distribution',
+                        data: Object.values(data.mood_counter),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
 
-        // Mood Over Time Chart
-        new Chart(document.getElementById('moodTimeChart'), {
-            type: 'line',
-            data: {
-                labels: data.mood_over_time.dates,
-                datasets: [{
-                    label: 'Mood Over Time',
-                    data: data.mood_over_time.values,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 5,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                return ['Very Sad', 'Sad', 'Neutral', 'Happy', 'Very Happy'][value - 1];
+            // Mood Over Time Chart
+            new Chart(document.getElementById('moodTimeChart'), {
+                type: 'line',
+                data: {
+                    labels: data.mood_over_time.dates,
+                    datasets: [{
+                        label: 'Mood Over Time',
+                        data: data.mood_over_time.values,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return ['Very Sad', 'Sad', 'Neutral', 'Happy', 'Very Happy'][value - 1];
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Goal-Habit Correlation Chart
-        new Chart(document.getElementById('correlationChart'), {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Goal-Habit Correlation',
-                    data: data.goal_habit_correlation,
-                    backgroundColor: 'rgb(255, 99, 132)'
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Goal Progress'
+            // Goal-Habit Correlation Chart
+            new Chart(document.getElementById('correlationChart'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Goal-Habit Correlation',
+                        data: data.goal_habit_correlation,
+                        backgroundColor: 'rgb(255, 99, 132)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Goal Progress'
+                            },
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return ['Not Started', 'In Progress', 'Completed'][value];
+                                }
+                            }
                         },
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                return ['Not Started', 'In Progress', 'Completed'][value];
-                            }
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Habit Completion Rate'
+                            },
+                            beginAtZero: true,
+                            max: 1
                         }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Habit Completion Rate'
-                        },
-                        beginAtZero: true,
-                        max: 1
                     }
                 }
-            }
+            });
         });
-    });
-</script>
+    </script>
 {% endblock %}

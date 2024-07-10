@@ -1,92 +1,91 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1 class="mt-4">Moods</h1>
+    <h1 class="mt-4">Moods</h1>
 
-<div class="card mb-4">
-    <div class="card-header">Log Daily Mood</div>
-    <div class="card-body">
-        <form method="post" action="{{ url_for('mood.moods') }}">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.date.label }}
-                {{ form.date(class="form-control", type="date") }}
-            </div>
-            <div class="form-group">
-                {{ form.mood_type.label }}
-                {{ form.mood_type(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.notes.label }}
-                {{ form.notes(class="form-control", rows="3") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
-    </div>
-</div>
-
-<!-- List of Mood Logs -->
-<div class="card mb-4">
-    <div class="card-header">Mood History</div>
-    <div class="card-body">
-        <ul class="list-group">
-            {% for mood in moods %}
-            <li class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5>{{ mood.date.strftime('%Y-%m-%d') }}</h5>
-                        <span class="badge badge-primary">{{ mood.mood_type.value }}</span>
-                        {% if mood.notes %}
-                        <p>{{ mood.notes }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <a href="{{ url_for('mood.edit_mood', mood_id=mood.id) }}" class="btn btn-sm btn-secondary">Edit</a>
-                        <form method="POST" action="{{ url_for('mood.delete_mood', mood_id=mood.id) }}" style="display: inline;">
-                            {{ form.hidden_tag() }}
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this mood entry?');">Delete</button>
-                        </form>
-                    </div>
+    <div class="card mb-4">
+        <div class="card-header">Log Daily Mood</div>
+        <div class="card-body">
+            <form method="post" action="{{ url_for('mood.moods') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.date.label }}
+                    {{ form.date(class="form-control", type="date") }}
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
+                <div class="form-group">
+                    {{ form.mood_type.label }}
+                    {{ form.mood_type(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.notes.label }}
+                    {{ form.notes(class="form-control", rows="3") }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
     </div>
-</div>
 
-<!-- Visual Representation of Mood Trends -->
-<div class="card mb-4">
-    <div class="card-header">Mood Trends</div>
-    <div class="card-body">
-        <canvas id="mood_chart"></canvas>
+    <!-- List of Mood Logs -->
+    <div class="card mb-4">
+        <div class="card-header">Mood History</div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for mood in moods %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5>{{ mood.date.strftime('%Y-%m-%d') }}</h5>
+                            <span class="badge badge-primary">{{ mood.mood_type.value }}</span>
+                            {% if mood.notes %}
+                            <p>{{ mood.notes }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{{ url_for('mood.edit_mood', mood_id=mood.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                            <form method="POST" action="{{ url_for('mood.delete_mood', mood_id=mood.id) }}" style="display: inline;">
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this mood entry?');">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript">
-    // JavaScript code to create the mood chart
-    var ctx = document.getElementById('mood_chart').getContext('2d');
-    var moodChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ dates | tojson }},
-            datasets: [{
-                label: 'Mood',
-                data: {{ mood_values | tojson }},
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 5
+    <!-- Visual Representation of Mood Trends -->
+    <div class="card mb-4">
+        <div class="card-header">Mood Trends</div>
+        <div class="card-body">
+            <canvas id="mood_chart"></canvas>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        // JavaScript code to create the mood chart
+        var ctx = document.getElementById('mood_chart').getContext('2d');
+        var moodChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ dates | tojson }},
+                datasets: [{
+                    label: 'Mood',
+                    data: {{ mood_values | tojson }},
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5
+                    }
                 }
             }
-        }
-    });
-</script>
-
+        });
+    </script>
 {% endblock %}

@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Waweza</h1>
+            <p class="tagline">Empower Your Personal Growth Journey</p>
+            <a href="{{ url_for('register') }}" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="{{ url_for('static', filename='images/goals.JPG') }}" alt="Goal Setting">
+                <h3>Goal Setting</h3>
+                <p>Set and track your personal and professional goals with ease.</p>
+            </div>
+            <div class="feature-card">
+                <img src="{{ url_for('static', filename='images/habit.JPG') }}" alt="Habit Tracking">
+                <h3>Habit Tracking</h3>
+                <p>Develop positive habits and break negative ones with our intuitive tracking system.</p>
+            </div>
+            <div class="feature-card">
+                <img src="{{ url_for('static', filename='images/mood.JPG') }}" alt="Mood Analytics">
+                <h3>Mood Analytics</h3>
+                <p>Gain insights into your emotional well-being with mood tracking and analysis.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Waweza</h2>
+            <p class="tagline">Your Personal Growth Companion</p>
+             
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <p class="intro">
+                        At Waweza, we believe that every individual has the power to transform their life and achieve their fullest potential. Our name, "Waweza," comes from Swahili and means "You Can." This simple yet powerful phrase embodies our core belief: with the right tools and mindset, you can accomplish anything you set your mind to.
+                    </p>
+                </div>
+            </div>
+    
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <h3>Our Mission</h3>
+                    <p>
+                        Waweza is more than just an app; it's a journey towards self-improvement and personal growth. Our mission is to empower you with the tools and insights you need to:
+                    </p>
+                    <ul>
+                        <li>Set and achieve meaningful goals</li>
+                        <li>Develop positive habits that stick</li>
+                        <li>Track and improve your mood and overall well-being</li>
+                        <li>Gain valuable insights through data-driven analytics</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3>Why Waweza?</h3>
+                    <p>
+                        In today's fast-paced world, it's easy to lose sight of our personal growth amidst the daily grind. Waweza provides a structured, easy-to-use platform that helps you stay focused on what truly matters - your personal development.
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <h3>Our Approach</h3>
+                    <p>
+                        We combine proven psychological techniques with cutting-edge technology to create a uniquely effective personal growth experience. Whether you're looking to advance in your career, improve your health, or simply find more balance in your life, Waweza is here to support you every step of the way.
+                    </p>
+                </div>
+            </div>
+    
+            <div class="row mt-5">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <h3>Join the Waweza Community</h3>
+                    <p>
+                        Your journey of personal growth doesn't have to be a solitary one. By joining Waweza, you become part of a community of like-minded individuals all striving to become the best versions of themselves.
+                    </p>
+                    <p class="mt-4">
+                        <strong>Remember, every great achievement starts with the decision to try. With Waweza, you're not just trying - you're equipping yourself with the tools to succeed.</strong>
+                    </p>
+                    <p class="tagline">Because with Waweza, you can. And you will.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mt-3">Start Your Journey</a>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+    <!-- Video Section -->
+    <section class="video-section">
+        <h2>See Waweza in Action</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <h3>What's Next for Waweza?</h3>
+        <p>We're constantly working to improve Waweza. Our upcoming features include personalized AI-driven insights, integration with popular productivity tools, and a mobile app for on-the-go access to your personal development journey.</p>
+    </section>
+
+    <div class="team-links">
+        <a href="https://github.com/yourusername/waweza" target="_blank" class="github-link">GitHub Repository</a>
+    </div>
+</div>
+{% endblock content %}
