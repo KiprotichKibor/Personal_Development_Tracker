@@ -12,13 +12,9 @@ The spark for Waweza came during a particularly challenging semester when I deci
 
 With Waweza, I aim to digitize and enhance this process, making personal development more accessible, data-driven, and ultimately, more effective for everyone.
 
-[Link to deployed Waweza application]
-
-[Link to project blog article]
-
 **Authors:**
-- Kiprotich Kibor - [LinkedIn] https://www.linkedin.com/in/kiprotich-kibor/
-- Kevin Gatamu - [LinkedIn] https://www.linkedin.com/in/kevingatamu/
+- Kiprotich Kibor - https://www.linkedin.com/in/kiprotich-kibor/
+- Kevin Gatamu - https://www.linkedin.com/in/kevingatamu/
 
 ## Features and Technical Challenges 🛠️
 
